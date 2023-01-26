@@ -140,7 +140,6 @@ class Buffer:
         s,a,r,T,sn = obs_tuple
         # restart form zero if buffer_capacity is exceeded, replacing old records
         index = self.buffer_counter % self.buffer_capacity
-
         self.state_buffer[index] = tf.squeeze(s)
         self.action_buffer[index] = a
         self.reward_buffer[index] = r
