@@ -15,7 +15,7 @@ n_states=5
 n_actions=2 #accelerate and steer
 
 
-max_iters=100000
+max_iters=500000
 #Discount factor: 0 values short-term, 1 values long-term rewards
 gamma=0.99
 # Target network update factor, for policy bootstrapping
@@ -24,7 +24,7 @@ tau = 0.005
 l_rate=1e-3
 
 #Data buffer parameters
-buf_length = max_iters
+buf_length = 50000
 batch_size = 100
 
 #Entropy to max (less chance to converge to locals)
@@ -34,11 +34,11 @@ alpha = tfp.util.DeferredTensor(log_alpha,tf.exp)
 
 
 #Do we want to train?
-training = True
+training = False
 
 #Weight params
 load_weights = True
-save_weights = True
+save_weights = False
 actor_w_file = "around_the_world273/weights/actor"
 critic1_w_file = "around_the_world273/weights/critic1"
 critic2_w_file = "around_the_world273/weights/critic2"
