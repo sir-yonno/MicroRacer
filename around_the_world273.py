@@ -15,7 +15,7 @@ n_states=5
 n_actions=2 #accelerate and steer
 
 
-max_iters=500000
+max_iters=100000
 #Discount factor: 0 values short-term, 1 values long-term rewards
 gamma=0.99
 # Target network update factor, for policy bootstrapping
@@ -24,7 +24,7 @@ tau = 0.005
 l_rate=1e-3
 
 #Data buffer parameters
-buf_length = 50000
+buf_length = max_iters
 batch_size = 100
 
 #Entropy to max (less chance to converge to locals)
@@ -40,6 +40,7 @@ training = False
 load_weights = True
 save_weights = False
 actor_w_file = "around_the_world273/weights/actor"
+actor2_w_file = "around_the_world273backup/weights/actor"
 critic1_w_file = "around_the_world273/weights/critic1"
 critic2_w_file = "around_the_world273/weights/critic2"
 
@@ -189,6 +190,8 @@ if load_weights:
     target_critic1([layers.Input(shape=(n_states)),layers.Input(shape=(n_actions))])
     target_critic2([layers.Input(shape=(n_states)),layers.Input(shape=(n_actions))])
     actor_model = keras.models.load_model(actor_w_file)
+    #actor2_model = Get_actor()
+    #actor2_model = keras.models.load_model(actor2_w_file)
     critic1_model = keras.models.load_model(critic1_w_file)
     critic2_model = keras.models.load_model(critic2_w_file)
 
@@ -203,6 +206,7 @@ target_critic2.set_weights(target_critic2_weights)
 
 #Trying with one, might have to multiply
 actor_opt = tf.keras.optimizers.Adam(l_rate)
+#actor2_opt = tf.keras.optimizers.Adam(l_rate)
 critic1_opt = tf.keras.optimizers.Adam(l_rate)
 critic2_opt = tf.keras.optimizers.Adam(l_rate)
 alpha_opt = tf.keras.optimizers.Adam(l_rate)
@@ -210,6 +214,7 @@ alpha_opt = tf.keras.optimizers.Adam(l_rate)
 critic1_model.compile(optimizer=critic1_opt)
 critic2_model.compile(optimizer=critic2_opt)
 actor_model.compile(optimizer=actor_opt)
+#actor2_model.compile(optimizer=actor2_opt)
 
 
 buffer = Buffer(buf_length,batch_size)
@@ -354,9 +359,9 @@ def train(max_iters=max_iters):
 if training:
     train()
 
-print("## Evaluating policy ##")
-tracks.metrics_run(actor_model, 10)
-tracks.newrun([actor_model])
+#print("## Evaluating policy ##")
+#tracks.metrics_run(actor_model, 10)
+#tracks.newrun([actor_model,actor2_model])
 
 
 def get_name():
